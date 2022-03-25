@@ -1,0 +1,5 @@
+content	zotero-endpoints				content/
+locale	zotero-endpoints	en-US		locale/en-US/
+skin	zotero-endpoints	default		skin/
+
+overlay	chrome://zotero/content/zoteroPane.xul	chrome://zotero-endpoints/content/zotero-endpoints.xul

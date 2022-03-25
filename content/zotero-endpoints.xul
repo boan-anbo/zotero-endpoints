@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://zotero-endpoints/skin/overlay.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://zotero-endpoints/locale/zotero-endpoints.dtd">
+
+<overlay id="zotero-endpoints-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script>
+    var globals = Function('return this')();
+    var zotero_endpoints_zoteropane = null;
+  </script>
+  <stringbundleset>
+    <stringbundle id="zotero-endpoints-strings" src="chrome://zotero-endpoints/locale/zotero-endpoints.properties"/>
+  </stringbundleset>
+
+	<!-- Include the main extension logic -->
+  <script src="chrome://zotero-endpoints/content/zotero-endpoints.js"/>
+  <script>
+    window.addEventListener('load', async function() {
+      try {
+        Zotero.debug('zotero-endpoints startup')
+        await Zotero.Endpoints.load(globals)
+        Zotero.debug('zotero-endpoints started')
+      } catch (err) {
+        Zotero.debug(`zotero-endpoints ZoteroPane overlay error: ${err.message}\n${err.stack ||''}`)
+      }
+    })
+  </script>
+
+  <popup id="zotero-itemmenu">
+    <menu class="menu-iconic" id="zotero-itemmenu-convert-menu" label="Bo's Tools">
+      <menupopup>
+        <menuitem label="Copy Attachments to Folder" oncommand="Zotero.Endpoints.Attachments.copyAttachmentsToFolder()"/>
+      </menupopup>
+
+    </menu>
+  </popup>
+</overlay>
