@@ -1,6 +1,10 @@
 import {ADDON_ROOT_PATH} from '../consts';
-import {searchItems} from '../utils/search';
+// import {searchItems} from '../utils/search';
 import {ResponseError, ResponseSuccessPayload} from '../responses/success';
+import {searchItems} from '../utils/search';
+import {SearchCondition, SearchRequest} from '../types/search-condition';
+import {getGetItemOptionFromRequest} from '../utils/get-item-option-from-request';
+// import {SearchCondition} from '../types/SearchCondition';
 
 declare const Zotero;
 
@@ -8,23 +12,22 @@ export const loadSearchItems = (rootPath: string, path: string): void => {
   const myEndpoint = Zotero.Server.Endpoints[`/${ADDON_ROOT_PATH}/${rootPath}/${path}`] = function() {
   };
   myEndpoint.prototype = {
-    supportedMethods: ['GET'],
+    supportedMethods: ['POST'],
     supportedDataTypes: 'application/json',
 
     /**
-         * @param {field} string: the field to search for
-         * @param {qeury} string: the query to search for
-         */
-    async init(postData) {
+         * the structure of the json request
+         * */
+    async init(postData: any): Promise<any> {
 
-      Zotero.debug(JSON.stringify(postData.query));
+      Zotero.debug(JSON.stringify(postData));
 
-      const {field, query, operator}: { field: string, query: string, operator: string | undefined } = postData.query;
+      const request = postData.data as SearchRequest;
+      const opt = getGetItemOptionFromRequest(postData);
+      const conditions = SearchCondition.fromJSON(request);
 
       try {
-        // search items by cite key, the result should be the only item
-        const items = await searchItems(field, query, operator ?? 'is');
-        Zotero.debug('Ready to return', JSON.stringify(items));
+        const items = await searchItems(conditions, request.joinMode, opt);
         return ResponseSuccessPayload(items);
       }
       catch (e: any) {
