@@ -5,6 +5,8 @@ import {loadHelloWorld} from './endpoints/health';
 import {loadGetSelectedItemAttachments, loadSelectNextItemsEndpoint} from './endpoints/select';
 import {loadAddItemToCurrentCollectionByCiteKey} from './endpoints/collection';
 import {loadSearchItems} from './endpoints/search';
+import {loadGetItems, loadSelectedItems} from './endpoints/items';
+import {loadCiteItems} from './endpoints/cite';
 
 export const loadAllEndpoints = async (): Promise<void> => {
 
@@ -16,5 +18,10 @@ export const loadAllEndpoints = async (): Promise<void> => {
   loadAddItemToCurrentCollectionByCiteKey('collection', 'addToCurrent');
   // search
   loadSearchItems('search', 'items');
+  // items
+  loadSelectedItems('items', 'selected');
+  loadGetItems('items', '');
+  // cite
+  loadCiteItems('cite', 'items');
 }
 
