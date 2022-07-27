@@ -13,3 +13,5 @@ node_modules
 .env
 .eslintcache
 /.github/
+/.idea/
+/package-lock.json

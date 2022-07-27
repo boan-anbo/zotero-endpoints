@@ -10,7 +10,7 @@ export const getCompleteZoteroItems = (items: Item[], opt?: GetZoteroItemOptions
   if (item.isRegularItem()) {
     item.getAttachments().forEach(attachmentId => attachments.push(Zotero.Items.get(attachmentId)))
   }
-  const citation = getItemCitation([item], opt);
+  const citation = opt?.includeCitation ? getItemCitation([item], opt) : undefined;
   const key = item.key;
   return {
     key,
