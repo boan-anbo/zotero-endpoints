@@ -6,14 +6,19 @@ export const ResponseSuccess = (message?: string, payload?: any): EndpointsRespo
     message = 'Success';
   }
 
-  return [200, 'application/json', JSON.stringify({message, payload})];
+  const code = 200;
+  return [code, 'application/json', JSON.stringify({message, payload, code})];
 }
 
-export const ResponseSuccessPayload = (payload?: any): EndpointsResponse => ResponseSuccess(undefined, payload)
+export const ResponseSuccessPayloadOnly = (payload?: any): EndpointsResponse => ResponseSuccess(undefined, payload)
 
 export const ResponseError = (message?: string, payload?: any): EndpointsResponse => {
   if (!message) {
     message = 'Error';
   }
-  return [400, 'application/json', JSON.stringify({message, payload})];
+  else {
+    message = `Error: ${message}`;
+  }
+  const code = 400;
+  return [code, 'application/json', JSON.stringify({message, payload, code})];
 }

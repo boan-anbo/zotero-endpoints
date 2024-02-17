@@ -14,7 +14,7 @@ export const getCitationsFromCitekeys = async (citationLines: GetCitationRequest
   for await (const citationLine of citationLines) {
     const lineCitationItems: CitationInputItem[] = [];
     for await (const citationItem of citationLine) {
-      const item = await searchItemsByCiteKey(citationItem.citeKey);
+      const item = await searchItemsByCiteKey([citationItem.citeKey]);
       if (item && item.length > 0) {
         lineCitationItems.push(new CitationInputItem(item[0].item, citationItem.locatorInfo));
       }

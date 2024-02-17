@@ -2,7 +2,7 @@ import {ADDON_ROOT_PATH} from '../consts';
 
 declare const Zotero: any
 
-export const loadHelloWorld = (rootPath: string, path: string): void => {
+export const loadHealth = (rootPath: string, path: string): void => {
   const myEndpoint = Zotero.Server.Endpoints[`/${ADDON_ROOT_PATH}/${rootPath}/${path}`] = function() {
   };
   myEndpoint.prototype = {

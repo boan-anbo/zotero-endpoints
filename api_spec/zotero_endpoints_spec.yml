@@ -1,0 +1,151 @@
+openapi: '3.0.0'
+info:
+  title: Zotero Endpoint
+  version: '1.0'
+servers:
+  - url: http://127.0.0.1:23119/endpoints
+paths:
+  /items:
+    get:
+      tags:
+        - items
+      parameters:
+        - in: query
+          name: citeKey
+          schema:
+            type: string
+          description: Citekey to look up items
+          required: false
+
+      responses:
+        '200':
+          description: OK
+  /search/items:
+    post:
+      tags:
+        - search
+      parameters:
+        - in: query
+          name: includeCitation
+          schema:
+            type: boolean
+      requestBody:
+        description: A set of conditions
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: found result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointResponse'
+  /select/attachmentPaths:
+    get:
+      tags:
+        - select
+      operationId: getSelectedAttachmentPaths
+      description: Get the paths of the attachments of the selected items
+      parameters:
+        - in: query
+          name: extension
+          schema:
+            type: string
+      responses:
+        '200':
+          description: attachment paths
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointResponseWithStringArray'
+  /collection/addToCurrent:
+    get:
+      tags:
+        - collection
+      operationId: collectionAddToCurrent
+      description: Use citation keys or Zotero URIs to add items to the current selected collection.
+      parameters:
+        - in: query
+          name: citeKey
+          schema:
+            type: string
+        - in: query
+          name: uris
+          schema:
+            type: string
+      responses:
+        '202':
+          description: items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointResponse'
+
+components:
+  schemas:
+    SearchRequest:
+      description: A json payload
+      type: object
+      properties:
+        joinMode:
+          type: string
+          enum:
+            - ANY
+            - ALL
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchCondition'
+      required:
+        - conditions
+    SearchCondition:
+      description: A search condition object
+      properties:
+        field:
+          type: string
+          enum:
+            - citationKey
+        operator:
+          type: string
+          enum:
+            - is
+            - contains
+        query:
+          type: string
+      required:
+        - field
+        - operator
+        - query
+    EndpointResponse:
+      description: Standard response body
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          type: object
+        code:
+          type: integer
+      required:
+        - message
+        - payload
+        - code
+    EndpointResponseWithStringArray:
+      description: Standard response body with a string array payload
+      type: object
+      properties:
+        message:
+          type: string
+        payload:
+          type: array
+          items:
+            type: string
+        code:
+          type: integer
+      required:
+        - message
+        - payload
+        - code

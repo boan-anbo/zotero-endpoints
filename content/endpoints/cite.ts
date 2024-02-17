@@ -1,5 +1,5 @@
 import {ADDON_ROOT_PATH} from '../consts';
-import {ResponseError, ResponseSuccessPayload} from '../responses/success';
+import {ResponseError, ResponseSuccessPayloadOnly} from '../responses/success';
 import {GetCitationRequest} from '../types/get-citation-request-response';
 import {getCitationsFromRequest} from '../utils/get-citations-from-citekeys';
 
@@ -23,7 +23,7 @@ export const loadCiteItems = (rootPath: string, path: string): void => {
 
       try {
         const result = await getCitationsFromRequest(request);
-        return ResponseSuccessPayload(result);
+        return ResponseSuccessPayloadOnly(result);
       }
       catch (e: any) {
         return ResponseError(e.message as string);

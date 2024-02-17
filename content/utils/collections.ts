@@ -1,8 +1,17 @@
+import {Item} from '../types/complete-zotero-item';
+
 declare const Zotero;
 
 export const getSelectedCollection = () => {
   const panel = Zotero.getActiveZoteroPane()
-  const currentCol = panel.getSelectedCollection();
+  return panel.getSelectedCollection();
+}
 
-  return currentCol;
+/**
+ * Get all items in sorted order (as currently shown in Zotero) in the current active collection, even when the collection is not activated.
+ */
+export const getAllItemsInSelectedCollection = (): Item[] => {
+  const pane = Zotero.getActiveZoteroPane()
+  const items = pane.getSortedItems()
+  return items
 }

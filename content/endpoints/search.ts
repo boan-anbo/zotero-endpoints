@@ -1,6 +1,6 @@
 import {ADDON_ROOT_PATH} from '../consts';
 // import {searchItems} from '../utils/search';
-import {ResponseError, ResponseSuccessPayload} from '../responses/success';
+import {ResponseError, ResponseSuccessPayloadOnly} from '../responses/success';
 import {searchItems} from '../utils/search';
 import {SearchCondition, SearchRequest} from '../types/search-condition';
 import {getGetItemOptionFromRequest} from '../utils/get-item-option-from-request';
@@ -22,13 +22,13 @@ export const loadSearchItems = (rootPath: string, path: string): void => {
 
       Zotero.debug(JSON.stringify(postData));
 
-      const request = postData.data as SearchRequest;
-      const opt = getGetItemOptionFromRequest(postData);
-      const conditions = SearchCondition.fromJSON(request);
 
       try {
+        const request = postData.data as SearchRequest;
+        const opt = getGetItemOptionFromRequest(postData);
+        const conditions = SearchCondition.fromJSON(request);
         const items = await searchItems(conditions, request.joinMode, opt);
-        return ResponseSuccessPayload(items);
+        return ResponseSuccessPayloadOnly(items);
       }
       catch (e: any) {
         return ResponseError(e.message as string);
