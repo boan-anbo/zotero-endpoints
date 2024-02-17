@@ -12,8 +12,12 @@ export const getCompleteZoteroItems = (items: Item[], opt?: GetZoteroItemOptions
   }
   const citation = opt?.includeCitation ? getItemCitation([item], opt) : undefined;
   const key = item.key;
+  const id = item.id;
+  const uri = Zotero.URI.getItemURI(item)
   return {
+    id,
     key,
+    uri,
     citationKey,
     item,
     attachments,

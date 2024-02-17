@@ -35,7 +35,7 @@ class Endpoints { // tslint:disable-line:variable-name
   }
 
   public test() {
-    showPopup('ahaha', 1239)
+    showPopup('test popup', 1239)
   }
 
 }

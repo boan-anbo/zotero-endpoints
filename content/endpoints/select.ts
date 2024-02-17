@@ -1,6 +1,6 @@
 import {ADDON_ROOT_PATH} from '../consts';
-import {getSelectedAttachments, selectNextNumberofItems} from '../utils/selection';
-import {ResponseError, ResponseSuccess, ResponseSuccessPayload} from '../responses/success';
+import {getSelectedAttachments, selectAnItemInCurrentCollection, selectNextNumberofItems} from '../utils/selection';
+import {ResponseError, ResponseSuccess, ResponseSuccessPayloadOnly} from '../responses/success';
 
 declare const Zotero: any
 
@@ -48,7 +48,7 @@ export const loadGetSelectedItemAttachments = (rootPath: string, path: string): 
     supportedDataTypes: 'application/json',
 
     /**
-     * @param {extension} string: the file extension to filter by; no filter if empty
+     * @param {postData.extension} string: the file extension to filter by; no filter if empty
      */
     async init(postData)  {
 
@@ -58,7 +58,32 @@ export const loadGetSelectedItemAttachments = (rootPath: string, path: string): 
 
       try {
         const paths = getSelectedAttachments(extension)
-        return ResponseSuccessPayload(paths);
+        return ResponseSuccessPayloadOnly(paths);
+      }
+      catch (e: any) {
+        return ResponseError(e.message as string);
+      }
+    },
+  }
+}
+
+export const loadSelectAnyItem = (rootPath: string, path: string): void => {
+  const myEndpoint = Zotero.Server.Endpoints[`/${ADDON_ROOT_PATH}/${rootPath}/${path}`] = function() {
+  };
+  myEndpoint.prototype = {
+    supportedMethods: ['GET'],
+    supportedDataTypes: 'application/json',
+
+    async init()  {
+
+      try {
+        if (selectAnItemInCurrentCollection()) {
+
+          return ResponseSuccessPayloadOnly();
+        }
+        else {
+          return ResponseError('No item selected');
+        }
       }
       catch (e: any) {
         return ResponseError(e.message as string);

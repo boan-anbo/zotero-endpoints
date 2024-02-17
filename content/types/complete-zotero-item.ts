@@ -11,8 +11,25 @@ export interface ItemCitation {
 }
 
 export interface ZoteroItemWithMetadata {
+  /**
+     * Internal numeric Zotero ID, not stable across syncs. Only use it in immediate session.
+     */
+  id: string
+  /**
+     * CiteKey. Need Better BibTeX plugin in order to use it.
+     */
   citationKey: string
+  /**
+     * Item key. Need to combine with Library ID to get the full URI. Use `uri` instead.
+     */
   key: string
+  /**
+     * Zotero item URI. Reliable. The current standard URI. Use this whenever possible.
+     */
+  uri: string
+  /**
+     * Zotero item with its current structure.
+     */
   item: Item
   attachments: Attachment[]
   citation: ItemCitation
@@ -97,11 +114,17 @@ export interface AttachmentTag {
 
 export interface Item {
   id: any
+
   saveTx()
+
   addToCollection(key: any)
+
   getField(arg0: string): string
+
   getAttachments(): Attachment[]
+
   isRegularItem()
+
   key: string
   version: number
   itemType: ItemType

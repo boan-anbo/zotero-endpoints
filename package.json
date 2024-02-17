@@ -9,7 +9,8 @@
     "postbuild": "zotero-plugin-zipup build zotero-endpoints",
     "release": "zotero-plugin-release",
     "postversion": "git push --follow-tags",
-    "start": "zotero-start"
+    "start": "zotero-start",
+    "generate:rust": "openapi-generator-cli generate -i api_spec/zotero_endpoints_spec.yml -g rust -o ../zotero_endpoints_client_rs --additional-properties=packageName=zotero_endpoints_client_rs,packageVersion=0.1.0"
   },
   "repository": {
     "type": "git",

@@ -1,3 +1,6 @@
+import {getSelectedItems} from './item';
+import {getAllItemsInSelectedCollection} from './collections';
+
 declare const Zotero;
 
 export const selectNextNumberofItems = (range: number, viewItems: boolean): void => {
@@ -35,7 +38,7 @@ export const selectNextNumberofItems = (range: number, viewItems: boolean): void
       foundNext = true;
     }
 
-    if ( endIndex > items.length - 1) {
+    if (endIndex > items.length - 1) {
       nextItems = []
       foundNext = true
     }
@@ -46,7 +49,7 @@ export const selectNextNumberofItems = (range: number, viewItems: boolean): void
   }
 
   if (nextItems) {
-    pane.selectItems(nextItems.map(i =>  i.id ))
+    pane.selectItems(nextItems.map(i => i.id))
 
 
     if (viewItems) {
@@ -64,7 +67,7 @@ export const getSelectedAttachments = (extension?: string): string[] => {
   const pane = Zotero.getActiveZoteroPane()
   const selectedItems = pane.getSelectedItems()
   const attachments = [];
-  selectedItems.forEach(item =>     {
+  selectedItems.forEach(item => {
     if (item.isRegularItem()) {
       item.getAttachments().forEach(attachmentId => attachments.push(Zotero.Items.get(attachmentId)))
     }
@@ -72,7 +75,35 @@ export const getSelectedAttachments = (extension?: string): string[] => {
   let paths = attachments.map(att => att.getFilePath())
 
   if (extension) {
-    paths = paths.filter(path => path.toLowerCase().endsWith(extension.toLowerCase()))
+    paths = paths.filter(path => path && path?.toLowerCase().endsWith(extension.toLowerCase()))
   }
   return paths.filter(path => path)
+}
+
+/**
+ * Select the default item in the current active collection if no items are selected.
+ * This is used when testing functions for item selections.
+ * If any items are selected, the function return true.
+ */
+export const selectAnItemInCurrentCollection = (): boolean => {
+  const selectedItem = getSelectedItems()[0]
+  if (!selectedItem) {
+    const sortedItems = getAllItemsInSelectedCollection()
+    if (sortedItems.length > 0) {
+      const firstItem = sortedItems[0]
+      selectItemsByItemIds([
+        firstItem.id as string,
+      ])
+      return true
+    }
+  }
+  else {
+    return true
+  }
+  return false
+}
+
+export const selectItemsByItemIds = (itemIds: string[]): void => {
+  const pane = Zotero.getActiveZoteroPane()
+  pane.selectItems(itemIds)
 }

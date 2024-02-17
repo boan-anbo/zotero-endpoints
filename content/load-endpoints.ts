@@ -1,21 +1,22 @@
 // import {loadHelloWorld} from './health';
 
 // eslint-disable-next-line @typescript-eslint/require-await
-import {loadHelloWorld} from './endpoints/health';
-import {loadGetSelectedItemAttachments, loadSelectNextItemsEndpoint} from './endpoints/select';
-import {loadAddItemToCurrentCollectionByCiteKey} from './endpoints/collection';
+import {loadHealth} from './endpoints/health';
+import {loadGetSelectedItemAttachments, loadSelectAnyItem, loadSelectNextItemsEndpoint} from './endpoints/select';
+import {loadAddItemToCurrentCollection} from './endpoints/collection';
 import {loadSearchItems} from './endpoints/search';
 import {loadGetItems, loadSelectedItems} from './endpoints/items';
 import {loadCiteItems} from './endpoints/cite';
 
 export const loadAllEndpoints = async (): Promise<void> => {
 
-  loadHelloWorld('hello', 'world');
+  loadHealth('hello', 'world');
   // selections
   loadSelectNextItemsEndpoint('select', 'nextItems');
   loadGetSelectedItemAttachments('select', 'attachmentPaths');
+  loadSelectAnyItem('select', 'any');
   // collections
-  loadAddItemToCurrentCollectionByCiteKey('collection', 'addToCurrent');
+  loadAddItemToCurrentCollection('collection', 'addToCurrent');
   // search
   loadSearchItems('search', 'items');
   // items
